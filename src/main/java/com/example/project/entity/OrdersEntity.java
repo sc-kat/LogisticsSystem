@@ -1,10 +1,9 @@
 package com.example.project.entity;
 
+import com.example.project.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity(name = "orders")
-@Data
 public class OrdersEntity {
     @Id
     private Long id;
@@ -12,7 +11,10 @@ public class OrdersEntity {
     @JoinColumn(name = "destination_id", nullable = false)
     private DestinationEntity destination;
     private String delivery_date;
-    private String status;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     private String last_updated;
 
 
