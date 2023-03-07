@@ -2,7 +2,6 @@ package com.example.project.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.List;
 
 @Entity(name = "destinations")
@@ -15,5 +14,5 @@ public class DestinationEntity {
     private String name;
     private Integer distance;
     @OneToMany(mappedBy = "destination", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrdersEntity> Orders;
+    private List<OrderEntity> Orders;
 }

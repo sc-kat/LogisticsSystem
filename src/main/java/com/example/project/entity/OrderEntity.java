@@ -2,20 +2,24 @@ package com.example.project.entity;
 
 import com.example.project.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.Data;
+
+import java.time.LocalDate;
 
 @Entity(name = "orders")
-public class OrdersEntity {
+@Data
+public class OrderEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private DestinationEntity destination;
-    private String delivery_date;
-
+    private LocalDate deliveryDate;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    private String last_updated;
+    private LocalDate lastUpdated;
 
 
 }

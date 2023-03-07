@@ -1,6 +1,8 @@
 package com.example.project;
+import com.example.project.support.UpdateDbFromCsvFile;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
 
 
@@ -8,7 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LogisticsSystemApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LogisticsSystemApplication.class, args);
+		ApplicationContext run = SpringApplication.run(LogisticsSystemApplication.class, args);
+		UpdateDbFromCsvFile updateDbFromCsvFile = run.getBean(UpdateDbFromCsvFile.class);
+
+		updateDbFromCsvFile.uploadCsvFiles();
+
+
 	}
 
 }
