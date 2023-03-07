@@ -10,9 +10,12 @@ public class DestinationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(unique = true)
     private String name;
+
     private Integer distance;
+
     @OneToMany(mappedBy = "destination", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderEntity> Orders;
 }
