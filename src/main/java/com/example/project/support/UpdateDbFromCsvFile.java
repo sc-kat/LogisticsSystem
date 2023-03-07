@@ -3,6 +3,7 @@ package com.example.project.support;
 import com.example.project.entity.DestinationEntity;
 import com.example.project.entity.OrderEntity;
 import com.example.project.enums.OrderStatus;
+import com.example.project.exception.DataNotFound;
 import com.example.project.repository.DestinationRepository;
 import com.example.project.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Slf4j
 public class UpdateDbFromCsvFile {
 
     private final DestinationRepository destinationRepository;
@@ -30,7 +30,7 @@ public class UpdateDbFromCsvFile {
         this.currentDateAndProfitService = currentDateAndProfitService;
     }
 
-    public void uploadCsvFiles(){
+    public void uploadCsvFiles() throws DataNotFound {
 
         List<String> destinationsListLines = readInputFile("src/main/resources/destinations.csv");
         List<String> ordersListLines = readInputFile("src/main/resources/orders.csv");
@@ -58,7 +58,7 @@ public class UpdateDbFromCsvFile {
         return destinations;
     }
 
-    public List<OrderEntity> splitOrderListLines(List<String> inputLinesList) {
+    public List<OrderEntity> splitOrderListLines(List<String> inputLinesList) throws DataNotFound {
 
         List<OrderEntity> orders = new ArrayList<>();
 
@@ -66,9 +66,10 @@ public class UpdateDbFromCsvFile {
 
             OrderEntity orderEntity = new OrderEntity();
             String[] elements = line.split(",");
-            Optional<DestinationEntity> destination = destinationRepository.findByName(elements[0]);
+            String destinationName = elements[0];
+            Optional<DestinationEntity> destination = destinationRepository.findByName(destinationName);
             if(destination.isEmpty()){
-                throw new RuntimeException("Destination cannot be found!");
+                throw new DataNotFound(String.format("Destination %s could not be found.", destinationName));
             }
 
             orderEntity.setDestination(destination.get());
@@ -84,7 +85,7 @@ public class UpdateDbFromCsvFile {
         }
         return orders;
     }
-    public List<String> readInputFile(String inputFile) {
+    public List<String> readInputFile(String inputFile) throws DataNotFound {
 
         List<String> inputLinesList = new ArrayList<>();
 
@@ -95,7 +96,7 @@ public class UpdateDbFromCsvFile {
                 line = reader.readLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DataNotFound("The input file could not be located.");
         }
 
         return inputLinesList;

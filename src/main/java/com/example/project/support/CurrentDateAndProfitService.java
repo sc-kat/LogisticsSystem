@@ -13,4 +13,13 @@ public class CurrentDateAndProfitService {
         this.currentDate = LocalDate.of(2021,12,14);
         this.profit = 0;
     }
+
+    private void incrementDate() {
+        this.currentDate.plusDays(1);
+    }
+
+    private void addProfit(Integer profitPerDay) {
+        this.profit += profitPerDay;
+    }
+
 }
