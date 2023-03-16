@@ -6,7 +6,6 @@ import com.example.project.enums.OrderStatus;
 import com.example.project.exception.DataNotFound;
 import com.example.project.repository.DestinationRepository;
 import com.example.project.repository.OrderRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -23,6 +22,7 @@ public class UpdateDbFromCsvFile {
     private final DestinationRepository destinationRepository;
     private final OrderRepository orderRepository;
     private final CurrentDateAndProfitService currentDateAndProfitService;
+
 
     public UpdateDbFromCsvFile(DestinationRepository destinationRepository, OrderRepository orderRepository, CurrentDateAndProfitService currentDateAndProfitService) {
         this.destinationRepository = destinationRepository;

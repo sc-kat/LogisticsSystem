@@ -14,11 +14,11 @@ public class CurrentDateAndProfitService {
         this.profit = 0;
     }
 
-    private void incrementDate() {
-        this.currentDate.plusDays(1);
+    public void incrementDate() {
+        this.currentDate = this.currentDate.plusDays(1);
     }
 
-    private void addProfit(Integer profitPerDay) {
+    public synchronized void addProfit(Integer profitPerDay) {
         this.profit += profitPerDay;
     }
 

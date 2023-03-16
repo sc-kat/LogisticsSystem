@@ -13,4 +13,6 @@ public interface DestinationRepository extends CrudRepository<DestinationEntity,
 
     @Query(value = "SELECT d FROM destinations d WHERE d.name = :name")
     Optional<DestinationEntity> findByName(@Param("name") String name);
+
+
 }
