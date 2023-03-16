@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import com.example.project.exception.ConditionsNotMetException;
 import com.example.project.exception.DataNotFound;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(DataNotFound.class)
+    @ExceptionHandler({DataNotFound.class, ConditionsNotMetException.class})
     public ResponseEntity<Object> handleDataNotFoundException(Exception ex, WebRequest webRequest) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
 
@@ -30,8 +31,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         ex.getBindingResult().getAllErrors().stream()
                 .filter(error -> error instanceof FieldError)
                 .map(objectError -> (FieldError) objectError)
-//                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)) // is doing the same
-//                 thing as the below forEach()
                 .forEach(objectError -> {
                     String fieldName = objectError.getField();
                     String errorMessage = objectError.getDefaultMessage();

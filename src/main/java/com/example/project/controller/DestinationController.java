@@ -22,7 +22,7 @@ public class DestinationController {
         this.destinationService = destinationService;
     }
 
-    @PostMapping("/add")  //TODO what should be returned?
+    @PostMapping("/add")
     public Long addDestinations(@Valid @RequestBody DestinationDto destinationDto) {
         return destinationService.addDestination(destinationDto);
     }
@@ -37,7 +37,7 @@ public class DestinationController {
         return destinationService.getAllDestinations();
     }
     @GetMapping("/{destinationId}")
-    public ResponseEntity<Object> getDestinationById(@PathVariable(name = "destinationId") String destinationId) {
+    public ResponseEntity<Object> getDestinationById(@PathVariable(name = "destinationId") String destinationId) throws DataNotFound {
         Long id;
 
         try {
@@ -49,7 +49,7 @@ public class DestinationController {
     }
 
     @DeleteMapping("/{destinationId}")
-    public ResponseEntity<Object> deleteDestinationById(@PathVariable(name = "destinationId") String destinationId) {
+    public ResponseEntity<Object> deleteDestinationById(@PathVariable(name = "destinationId") String destinationId) throws DataNotFound {
         Long id;
         try {
             id = Long.valueOf(destinationId);

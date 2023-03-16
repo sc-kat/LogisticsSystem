@@ -1,27 +1,27 @@
 package com.example.project.converter;
 
 import com.example.project.dto.DestinationDto;
-import com.example.project.dto.OrderDto;
 import com.example.project.entity.DestinationEntity;
-import com.example.project.entity.OrderEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class DestinationConverter {
+
+    private final OrderConverter orderConverter;
+
+    public DestinationConverter(OrderConverter orderConverter) {
+        this.orderConverter = orderConverter;
+    }
 
     public DestinationEntity fromDtoToEntity(DestinationDto destinationDto) {
         DestinationEntity destinationEntity = new DestinationEntity();
 
         destinationEntity.setName(destinationDto.getName());
         destinationEntity.setDistance(destinationDto.getDistance());
-//        destinationEntity.setOrders(destinationDto.getOrders());   //TODO fix this
+        destinationEntity.setOrders(orderConverter.fromDtosToEntities(destinationDto.getOrders()));
 
         return destinationEntity;
     }
-
-
 
     public DestinationDto fromEntityToDto(DestinationEntity destinationEntity) {
         DestinationDto destinationDto = new DestinationDto();
@@ -29,7 +29,7 @@ public class DestinationConverter {
         destinationDto.setId(destinationEntity.getId());
         destinationDto.setName(destinationEntity.getName());
         destinationDto.setDistance(destinationEntity.getDistance());
-//        destinationDto.setOrders(destinationEntity.getOrders());
+        destinationDto.setOrders(orderConverter.fromEntitiesToDtos(destinationEntity.getOrders()));
 
         return destinationDto;
     }

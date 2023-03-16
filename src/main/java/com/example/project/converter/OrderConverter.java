@@ -52,4 +52,10 @@ public class OrderConverter {
         return order;
 
     }
+
+    public List<OrderDto> fromEntitiesToDtos(List<OrderEntity> orderEntities) {
+        return orderEntities.stream()
+                .map(orderEntity -> fromEntityToDto(orderEntity))
+                .toList();
+    }
 }

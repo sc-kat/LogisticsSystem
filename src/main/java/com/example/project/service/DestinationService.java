@@ -35,16 +35,13 @@ public class DestinationService {
     }
 
     public Long updateDestination(DestinationDto destinationDto) throws DataNotFound {
+        //TODO validare pe ID
+        DestinationEntity destinationEntity = destinationRepository.findById(destinationDto.getId())
+                    .orElseThrow(() -> new DataNotFound(String.format("The destination with id %s, does not exist.", destinationDto.getId())));
 
-        Optional<DestinationEntity> destinationByIdOptional = destinationRepository.findById(destinationDto.getId());
-        if(destinationByIdOptional.isEmpty()) {
-            throw new DataNotFound(String.format("The destination with id %s, does not exist.", destinationDto.getId()));
-        }
 
-        DestinationEntity destinationEntity = destinationByIdOptional.get();
-
-            destinationEntity.setName(destinationDto.getName());  //TODO Q: mai verificam daca name/distance sunt not-null daca sunt setate nonEmpty in Dto?
-            destinationEntity.setDistance(destinationDto.getDistance());
+        destinationEntity.setName(destinationDto.getName());
+        destinationEntity.setDistance(destinationDto.getDistance());
 
         return destinationRepository.save(destinationEntity).getId();
     }
@@ -58,15 +55,24 @@ public class DestinationService {
 
     }
 
-    public DestinationDto getDestinationById(Long id) {
-        //code to write
+    public DestinationDto getDestinationById(Long id) throws DataNotFound {
+        Optional<DestinationEntity> destinationById = destinationRepository.findById(id);
 
-        return null; // null to be changed
+        if(destinationById.isEmpty()) {
+            throw new DataNotFound("The Id could not be found in the database.");
+        }
+
+        return destinationConverter.fromEntityToDto(destinationById.get());
 
     }
 
-    public void deleteDestinationById(Long id) {
+    public void deleteDestinationById(Long id) throws DataNotFound {
 
-        //delete destination fara cascade? Orderele raman disponibile?
+        if(!destinationRepository.existsById(id)) {
+            throw new DataNotFound(String.format("The destination with id %s does not exist in the database.", id));
+        }
+
+        destinationRepository.deleteById(id);
+
     }
 }
