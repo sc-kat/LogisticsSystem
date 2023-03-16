@@ -14,5 +14,5 @@ public class DestinationDto {
     @NotEmpty(message = "The distance cannot be null")
     private Integer distance;
 //    @NotEmpty(message = "At least one order must be added")
-    private List<OrderEntity> Orders;
+    private List<OrderDto> Orders;
 }

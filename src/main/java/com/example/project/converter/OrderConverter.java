@@ -1,11 +1,15 @@
 package com.example.project.converter;
 
+import com.example.project.dto.DestinationDto;
 import com.example.project.dto.OrderDto;
+import com.example.project.entity.DestinationEntity;
 import com.example.project.entity.OrderEntity;
 import com.example.project.enums.OrderStatus;
 import com.example.project.repository.DestinationRepository;
 import com.example.project.support.CurrentDateAndProfitService;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class OrderConverter {
@@ -28,6 +32,12 @@ public class OrderConverter {
 
         return order;
 
+    }
+
+    public List<OrderEntity> fromDtosToEntities(List<OrderDto> orderDtos) {
+        return orderDtos.stream()
+                .map(this::fromDtoToEntity)
+                .toList();
     }
 
     public OrderDto fromEntityToDto(OrderEntity orderEntity) {

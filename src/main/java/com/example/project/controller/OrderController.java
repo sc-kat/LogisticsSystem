@@ -35,7 +35,7 @@ public class OrderController {
     @GetMapping("/status_endpoint")
     public List<OrderDto> statusEndpoint(@RequestParam(name = "date", required = false) LocalDate date,
                                          @RequestParam(name = "destination", required = false) String destination) throws DataNotFound {
-        return orderService.getStatusesByDateAndDestination(date, destination);
+        return orderService.getStatusByDateAndDestination(date, destination);
     }
 
 

@@ -32,7 +32,7 @@ public class OrderService {
         this.currentDateAndProfitService = currentDateAndProfitService;
     }
 
-    public Map<String, List<OrderDto>> addOrders(List<OrderDto> orderDtos) {                                                //TODO to add validation and exceptions
+    public Map<String, List<OrderDto>> addOrders(List<OrderDto> orderDtos) {                                                //TODO to add exceptions
         List<OrderDto> validOrders = new ArrayList<>();
         List<OrderDto> invalidOrders = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class OrderService {
                     destinationRepository.findByName(orderDto.getDestination()).isPresent()) {
                 validOrders.add(orderDto);
             } else {
-                    invalidOrders.add(orderDto);                                                                             //TODO Document the order is invalid
+                    invalidOrders.add(orderDto);
             }
         });
         List<OrderEntity> orderEntities = validOrders.stream()
@@ -75,6 +75,7 @@ public class OrderService {
         orderEntitiesToUpdate.forEach(orderEntity -> {
             if (orderEntity.getStatus() != OrderStatus.DELIVERED) {
                 orderEntity.setStatus(OrderStatus.CANCELLED);
+                orderRepository.save(orderEntity);
                 orderRepository.updateLastUpdated(currentDateAndProfitService.getCurrentDate(), orderEntity.getId());
 
                 cancelledOrderIds.add(orderEntity.getId());
@@ -89,9 +90,9 @@ public class OrderService {
 
     }
 
-    public List<OrderDto> getStatusesByDateAndDestination(LocalDate date, String destination) throws DataNotFound {
+    public List<OrderDto> getStatusByDateAndDestination(LocalDate date, String destination) throws DataNotFound {
 
-        if(date == null || date.isBefore(currentDateAndProfitService.getCurrentDate()) ) { //TODO insert exception to let the client know when he adds a date from the past
+        if(date == null) {
             date = currentDateAndProfitService.getCurrentDate();
         }
 
