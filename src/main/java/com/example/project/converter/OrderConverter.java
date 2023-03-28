@@ -1,8 +1,6 @@
 package com.example.project.converter;
 
-import com.example.project.dto.DestinationDto;
 import com.example.project.dto.OrderDto;
-import com.example.project.entity.DestinationEntity;
 import com.example.project.entity.OrderEntity;
 import com.example.project.enums.OrderStatus;
 import com.example.project.repository.DestinationRepository;
@@ -53,9 +51,4 @@ public class OrderConverter {
 
     }
 
-    public List<OrderDto> fromEntitiesToDtos(List<OrderEntity> orderEntities) {
-        return orderEntities.stream()
-                .map(orderEntity -> fromEntityToDto(orderEntity))
-                .toList();
-    }
 }

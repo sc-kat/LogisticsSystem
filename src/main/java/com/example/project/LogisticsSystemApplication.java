@@ -1,10 +1,13 @@
 package com.example.project;
 import com.example.project.exception.DataNotFound;
 import com.example.project.support.UpdateDbFromCsvFile;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import java.io.File;
 
 
 @SpringBootApplication
@@ -16,6 +19,7 @@ public class LogisticsSystemApplication {
 		UpdateDbFromCsvFile updateDbFromCsvFile = run.getBean(UpdateDbFromCsvFile.class);
 
 		updateDbFromCsvFile.uploadCsvFiles();
+
 	}
 
 }

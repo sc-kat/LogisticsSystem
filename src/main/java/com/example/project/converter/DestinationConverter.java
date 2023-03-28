@@ -18,7 +18,6 @@ public class DestinationConverter {
 
         destinationEntity.setName(destinationDto.getName());
         destinationEntity.setDistance(destinationDto.getDistance());
-        destinationEntity.setOrders(orderConverter.fromDtosToEntities(destinationDto.getOrders()));
 
         return destinationEntity;
     }
@@ -29,7 +28,7 @@ public class DestinationConverter {
         destinationDto.setId(destinationEntity.getId());
         destinationDto.setName(destinationEntity.getName());
         destinationDto.setDistance(destinationEntity.getDistance());
-        destinationDto.setOrders(orderConverter.fromEntitiesToDtos(destinationEntity.getOrders()));
+        destinationDto.setNumberOfOrders(destinationEntity.getOrders().size());
 
         return destinationDto;
     }

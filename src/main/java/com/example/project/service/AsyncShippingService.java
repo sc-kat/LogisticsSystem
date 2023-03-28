@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -52,8 +51,8 @@ public class AsyncShippingService {
         Integer profitPerDayPerDestination = destinationEntity.getDistance() * filteredOrderEntities.size();
         currentDateAndProfitService.addProfit(profitPerDayPerDestination);
 
-        log.info(String.format("%s deliveries completed for %s, profit = %s", filteredOrderEntities.size(),
-                destinationEntity.getName(), currentDateAndProfitService.getProfit()));
+        log.info(String.format("%s deliveries completed for %s", filteredOrderEntities.size(),
+                destinationEntity.getName()));
 
 
     }

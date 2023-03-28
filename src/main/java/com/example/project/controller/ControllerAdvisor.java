@@ -2,6 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.exception.ConditionsNotMetException;
 import com.example.project.exception.DataNotFound;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,9 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
-    @ExceptionHandler({DataNotFound.class, ConditionsNotMetException.class})
+    @ExceptionHandler({DataNotFound.class,
+            IllegalArgumentException.class,
+            ConditionsNotMetException.class})
     public ResponseEntity<Object> handleDataNotFoundException(Exception ex, WebRequest webRequest) {
+        logger.warn(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
 
     }

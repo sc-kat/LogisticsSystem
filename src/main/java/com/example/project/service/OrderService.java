@@ -32,7 +32,7 @@ public class OrderService {
         this.currentDateAndProfitService = currentDateAndProfitService;
     }
 
-    public Map<String, List<OrderDto>> addOrders(List<OrderDto> orderDtos) {                                                //TODO to add exceptions
+    public Map<String, List<OrderDto>> addOrders(List<OrderDto> orderDtos) {
         List<OrderDto> validOrders = new ArrayList<>();
         List<OrderDto> invalidOrders = new ArrayList<>();
 
@@ -79,10 +79,8 @@ public class OrderService {
                 orderRepository.updateLastUpdated(currentDateAndProfitService.getCurrentDate(), orderEntity.getId());
 
                 cancelledOrderIds.add(orderEntity.getId());
-
-
             } else  {
-                failedOrderIds.add(orderEntity.getId());                                                                   //TODO send info to client with what was already delivered, what was incorrect, etc
+                failedOrderIds.add(orderEntity.getId());
             }
         });
 
@@ -108,7 +106,7 @@ public class OrderService {
                         .toList();
             } else {
                 return ordersByDeliveryDate.stream()
-                        .filter(orderEntity -> Objects.equals(orderEntity.getDestination().getName().toLowerCase(), destination))
+                        .filter(orderEntity -> Objects.equals(orderEntity.getDestination().getName().toLowerCase(), destination.toLowerCase()))
                         .map(orderConverter::fromEntityToDto)
                         .toList();
             }

@@ -4,6 +4,11 @@
         <encoder>
             <pattern>%d{dd-MM-yyyy HH:mm:ss} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">

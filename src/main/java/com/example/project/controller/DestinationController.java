@@ -1,14 +1,17 @@
 package com.example.project.controller;
 
 import com.example.project.dto.DestinationDto;
+import com.example.project.exception.ConditionsNotMetException;
 import com.example.project.exception.DataNotFound;
 import com.example.project.service.DestinationService;
+import com.example.project.support.MyResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,13 +26,18 @@ public class DestinationController {
     }
 
     @PostMapping("/add")
-    public Long addDestinations(@Valid @RequestBody DestinationDto destinationDto) {
+    public Long addDestinations(@Valid @RequestBody DestinationDto destinationDto) throws ConditionsNotMetException {
         return destinationService.addDestination(destinationDto);
     }
 
     @PutMapping("/update")
-    public Long updateDestination(@Valid @RequestBody DestinationDto destinationDto) throws DataNotFound {
-        return destinationService.updateDestination(destinationDto);
+    public MyResponse updateDestination(@Valid @RequestBody DestinationDto destinationDto) throws DataNotFound {
+        List<Long> toReturnIds = new ArrayList<>();
+        toReturnIds.add(destinationService.updateDestination(destinationDto));
+
+
+        return new MyResponse("Update done.", toReturnIds);
+
     }
 
     @GetMapping

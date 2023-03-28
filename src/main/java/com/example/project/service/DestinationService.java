@@ -4,8 +4,10 @@ import com.example.project.converter.DestinationConverter;
 import com.example.project.converter.OrderConverter;
 import com.example.project.dto.DestinationDto;
 import com.example.project.entity.DestinationEntity;
+import com.example.project.exception.ConditionsNotMetException;
 import com.example.project.exception.DataNotFound;
 import com.example.project.repository.DestinationRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Service
+@Slf4j
 public class DestinationService {
 
     private final DestinationRepository destinationRepository;
@@ -26,21 +29,25 @@ public class DestinationService {
     }
 
 
-    public Long addDestination(DestinationDto destinationDto) {
-        DestinationEntity destinationEntity = destinationConverter.fromDtoToEntity(destinationDto);
-        destinationEntity.setOrders(orderConverter.fromDtosToEntities(destinationDto.getOrders()));
-        destinationEntity.getOrders().forEach(orderEntity -> orderEntity.setDestination(destinationEntity));
+    public Long addDestination(DestinationDto destinationDto) throws ConditionsNotMetException {
+        if(destinationRepository.findByName(destinationDto.getName()).isPresent()) {
+            throw new ConditionsNotMetException("The destination provided already exists.");
+        }
 
+        DestinationEntity destinationEntity = destinationConverter.fromDtoToEntity(destinationDto);
         return destinationRepository.save(destinationEntity).getId();
     }
 
     public Long updateDestination(DestinationDto destinationDto) throws DataNotFound {
-        //TODO validare pe ID
+
+        if(destinationDto.getId() == null) {
+            throw new IllegalArgumentException("The given id must not be null");
+        }
+
         DestinationEntity destinationEntity = destinationRepository.findById(destinationDto.getId())
                     .orElseThrow(() -> new DataNotFound(String.format("The destination with id %s, does not exist.", destinationDto.getId())));
 
-
-        destinationEntity.setName(destinationDto.getName());
+        destinationEntity.setName(destinationDto.getName());  //TODO Q: setName nu se poate face, ar trebui ca body-ul sa contina doar ID si distance (singurul element modificabil)
         destinationEntity.setDistance(destinationDto.getDistance());
 
         return destinationRepository.save(destinationEntity).getId();
@@ -61,6 +68,7 @@ public class DestinationService {
         if(destinationById.isEmpty()) {
             throw new DataNotFound("The Id could not be found in the database.");
         }
+
 
         return destinationConverter.fromEntityToDto(destinationById.get());
 

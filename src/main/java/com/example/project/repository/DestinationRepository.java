@@ -11,8 +11,10 @@ import java.util.Optional;
 @Repository
 public interface DestinationRepository extends CrudRepository<DestinationEntity, Long> {
 
-    @Query(value = "SELECT d FROM destinations d WHERE d.name = :name")
+    @Query(value = "SELECT d FROM destinations d WHERE LOWER(d.name) = LOWER(:name)")
     Optional<DestinationEntity> findByName(@Param("name") String name);
+
+
 
 
 }
