@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DestinationDto {
     @Min(value = 1)
     private Long id;
-    @NotEmpty(message = "Destination name cannot be null")  //TODO how can we log these messages without repeating the validation in a setter.
+    @NotEmpty(message = "Destination name cannot be null")
     private String name;
     @NotNull(message = "The distance cannot be null")
     private Integer distance;

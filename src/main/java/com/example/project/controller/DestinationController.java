@@ -31,7 +31,7 @@ public class DestinationController {
     }
 
     @PutMapping("/update")
-    public MyResponse updateDestination(@Valid @RequestBody DestinationDto destinationDto) throws DataNotFound {
+    public MyResponse updateDestination(@Valid @RequestBody DestinationDto destinationDto) throws DataNotFound, ConditionsNotMetException {
         List<Long> toReturnIds = new ArrayList<>();
         toReturnIds.add(destinationService.updateDestination(destinationDto));
 
@@ -46,10 +46,10 @@ public class DestinationController {
     }
     @GetMapping("/{destinationId}")
     public ResponseEntity<Object> getDestinationById(@PathVariable(name = "destinationId") String destinationId) throws DataNotFound {
-        Long id;
+        long id;
 
         try {
-            id = Long.valueOf(destinationId);
+            id = Long.parseLong(destinationId);
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("The provided id does not have the correct format.", HttpStatus.BAD_REQUEST);
         }
@@ -58,9 +58,9 @@ public class DestinationController {
 
     @DeleteMapping("/{destinationId}")
     public ResponseEntity<Object> deleteDestinationById(@PathVariable(name = "destinationId") String destinationId) throws DataNotFound {
-        Long id;
+        long id;
         try {
-            id = Long.valueOf(destinationId);
+            id = Long.parseLong(destinationId);
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("The provided id does not have the correct format.", HttpStatus.BAD_REQUEST);
         }
