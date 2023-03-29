@@ -2,6 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.exception.ConditionsNotMetException;
 import com.example.project.exception.DataNotFound;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,10 +41,19 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                     String fieldName = objectError.getField();
                     String errorMessage = objectError.getDefaultMessage();
 
+                    logger.warn(errorMessage);
                     validationErrors.put(fieldName, errorMessage);
                 });
         return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleValidationException(Exception ex, WebRequest webRequest) {
+        int i = ex.getMessage().indexOf(" ");
+        String errorMessage = ex.getMessage().substring(i);
+        log.warn(errorMessage);
+        return handleExceptionInternal(ex, errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+    }
 
 }

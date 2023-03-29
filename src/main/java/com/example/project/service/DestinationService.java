@@ -1,7 +1,6 @@
 package com.example.project.service;
 
 import com.example.project.converter.DestinationConverter;
-import com.example.project.converter.OrderConverter;
 import com.example.project.dto.DestinationDto;
 import com.example.project.entity.DestinationEntity;
 import com.example.project.exception.ConditionsNotMetException;
@@ -20,12 +19,10 @@ public class DestinationService {
 
     private final DestinationRepository destinationRepository;
     private final DestinationConverter destinationConverter;
-    private final OrderConverter orderConverter;
 
-    public DestinationService(DestinationRepository destinationRepository, DestinationConverter destinationConverter, OrderConverter orderConverter) {
+    public DestinationService(DestinationRepository destinationRepository, DestinationConverter destinationConverter) {
         this.destinationRepository = destinationRepository;
         this.destinationConverter = destinationConverter;
-        this.orderConverter = orderConverter;
     }
 
 
@@ -38,17 +35,27 @@ public class DestinationService {
         return destinationRepository.save(destinationEntity).getId();
     }
 
-    public Long updateDestination(DestinationDto destinationDto) throws DataNotFound {
+    public Long updateDestination(DestinationDto destinationDto) throws DataNotFound, ConditionsNotMetException {
 
         if(destinationDto.getId() == null) {
             throw new IllegalArgumentException("The given id must not be null");
         }
 
         DestinationEntity destinationEntity = destinationRepository.findById(destinationDto.getId())
-                    .orElseThrow(() -> new DataNotFound(String.format("The destination with id %s, does not exist.", destinationDto.getId())));
+                    .orElseThrow(() -> new DataNotFound(
+                            String.format("The destination with id %s, does not exist.", destinationDto.getId())));
 
-        destinationEntity.setName(destinationDto.getName());  //TODO Q: setName nu se poate face, ar trebui ca body-ul sa contina doar ID si distance (singurul element modificabil)
-        destinationEntity.setDistance(destinationDto.getDistance());
+        if(destinationRepository.findByName(destinationDto.getName()).isPresent() &&
+                !destinationEntity.getName().equals(destinationDto.getName())){
+            throw new ConditionsNotMetException("Destination is already present in the db with another Id.");
+        }
+
+        if(!destinationDto.getName().equals(" ")){
+            destinationEntity.setName(destinationDto.getName());
+        }
+
+            destinationEntity.setDistance(destinationDto.getDistance());
+
 
         return destinationRepository.save(destinationEntity).getId();
     }
