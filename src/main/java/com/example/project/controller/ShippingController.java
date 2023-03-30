@@ -19,7 +19,8 @@ public class ShippingController {
     private final ExecutorConfig executorConfig;
 
 
-    public ShippingController(ShippingService shippingService, CurrentDateAndProfitService currentDateAndProfitService, ExecutorConfig executorConfig) {
+    public ShippingController(ShippingService shippingService, CurrentDateAndProfitService currentDateAndProfitService,
+                              ExecutorConfig executorConfig) {
         this.shippingService = shippingService;
         this.currentDateAndProfitService = currentDateAndProfitService;
         this.executorConfig = executorConfig;

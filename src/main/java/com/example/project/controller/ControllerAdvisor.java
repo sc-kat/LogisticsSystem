@@ -21,13 +21,16 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
-    @ExceptionHandler({DataNotFound.class,
-            IllegalArgumentException.class,
-            ConditionsNotMetException.class})
+    @ExceptionHandler(DataNotFound.class)
     public ResponseEntity<Object> handleDataNotFoundException(Exception ex, WebRequest webRequest) {
         logger.warn(ex.getMessage());
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, webRequest);
+    }
+    @ExceptionHandler({IllegalArgumentException.class,
+                    ConditionsNotMetException.class})
+    public ResponseEntity<Object> handleExceptions(Exception ex, WebRequest webRequest) {
+        logger.warn(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
-
     }
 
     @Override
