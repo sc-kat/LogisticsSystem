@@ -15,7 +15,7 @@ public class CustomInfoContributor implements InfoContributor {
 
     @Override
     public void contribute(Info.Builder builder) {
-        builder.withDetail("current-date", currentDateAndProfitService.getCurrentDate());  //TODO de verificat daca e ok sa injectej metoda de currentdate si profit\
+        builder.withDetail("current-date", currentDateAndProfitService.getCurrentDate());
 
         builder.withDetail("overall-profit", currentDateAndProfitService.getProfit());
     }

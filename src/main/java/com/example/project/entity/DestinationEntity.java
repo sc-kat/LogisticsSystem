@@ -1,11 +1,14 @@
 package com.example.project.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 @Entity(name = "destinations")
-@Data
+@Setter
+@Getter
 public class DestinationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,5 +20,5 @@ public class DestinationEntity {
     private Integer distance;
 
     @OneToMany(mappedBy = "destination", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<OrderEntity> Orders;
+    private List<OrderEntity> orders;
 }

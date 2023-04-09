@@ -99,7 +99,7 @@ public class OrderService {
         if(ordersByDeliveryDate.isEmpty()){
             throw new DataNotFound("No orders were found.");
         } else {
-            if (destination.isEmpty()) {
+            if (destination == null || destination.isEmpty()) {  
 
                 return ordersByDeliveryDate.stream()
                         .map(orderConverter::fromEntityToDto)
